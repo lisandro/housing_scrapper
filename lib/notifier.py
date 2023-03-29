@@ -27,7 +27,8 @@ class Notifier(NullNotifier):
             logging.info(f"Notifying about {prop['url']}")
             self.bot.send_message(chat_id=self.config['chat_id'], 
                     text=f"[{prop['title']}]({prop['url']})",
-                    parse_mode=telegram.ParseMode.MARKDOWN)
+                    parse_mode=telegram.ParseMode.MARKDOWN,
+                    disable_web_page_preview=False)
 
     def test(self, message):
         self.bot.send_message(chat_id=self.config['chat_id'], text=message)

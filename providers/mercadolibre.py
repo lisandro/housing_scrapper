@@ -23,14 +23,13 @@ class Mercadolibre(BaseProvider):
                 break
 
             for prop in properties:
-                section = prop.find('a', class_='ui-search-result__link')
-                if section is None:
-                    section = prop.find('a', class_='ui-search-result__content')
+                section = prop.find('a', class_='ui-search-link')
+                content = prop.find('div', class_='ui-search-result__content')
                 href = section['href']
                 matches = re.search(regex, href)
                 internal_id = matches.group(1).replace('-', '')
-                price_section = section.find('span', class_='price-tag')
-                title_section = section.find('div', class_='ui-search-item__group--title')
+                price_section = content.find('div', class_='ui-search-price__second-line')
+                title_section = content.find('div', class_='ui-search-item__group--title')
                 title = title_section.find('span').get_text().strip() + \
                     ': ' + title_section.find('h2').get_text().strip()
                 if price_section is not None:
@@ -43,6 +42,6 @@ class Mercadolibre(BaseProvider):
                     'provider': self.provider_name
                     }
 
-            from_ += 50
-            page_link = self.provider_data['base_url'] + source + f"_Desde_{from_}_NoIndex_True"
+            from_ += 48
+            page_link = self.provider_data['base_url'] + source + f"_Desde_{from_}_NoIndex_item"
     

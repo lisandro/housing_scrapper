@@ -12,10 +12,10 @@ class Zonaprop(BaseProvider):
         while(True):
             logging.info(f"Requesting {page_link}")
             page_response = self.request(page_link)
-            
+
             if page_response.status_code != 200:
                 break
-            
+
             page_content = BeautifulSoup(page_response.content, 'lxml')
             properties = page_content.find_all('div', class_='postingCard')
 
@@ -28,13 +28,18 @@ class Zonaprop(BaseProvider):
                 price_section = prop.find('span', class_='firstPrice')
                 if price_section is not None:
                     title = title + ' ' + price_section['data-price']
-                    
+
                 yield {
                     'title': title, 
                     'url': self.provider_data['base_url'] + prop['data-to-posting'],
                     'internal_id': prop['data-id'],
                     'provider': self.provider_name
                     }
+
+
+            next_page = page_content.find('a', {'data-qa': 'PAGING_NEXT'})
+            if next_page is None:
+                break
 
             page += 1
             page_link = self.provider_data['base_url'] + source.replace(".html", f"-pagina-{page}.html")

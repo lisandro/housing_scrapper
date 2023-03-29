@@ -23,10 +23,10 @@ class Argenprop(BaseProvider):
                 break
 
             for prop in properties:
-                title = prop.find('h3', class_='card__title')['title']
+                title = prop.find('h2', class_='card__title')
                 price_section = prop.find('p', class_='card__price')
                 if price_section is not None:
-                    title = title + ' ' + price_section.get_text().strip()
+                    title = title.get_text().strip() + ' ' + price_section.get_text().strip()
                 href = prop.find('a', class_='card')['href']
                 matches = re.search(regex, href)
                 internal_id = matches.group(1)
@@ -38,5 +38,9 @@ class Argenprop(BaseProvider):
                     'provider': self.provider_name
                     }
 
+            next_page = page_content.find('li', class_='pagination__page-next pagination__page pagination__page--disable')
+            if next_page is not None:
+                break
+
             page += 1
-            page_link = self.provider_data['base_url'] + source + f"-pagina-{page}"
+            page_link = self.provider_data['base_url'] + source + f"&pagina-{page}"
