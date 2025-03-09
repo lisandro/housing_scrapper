@@ -48,6 +48,17 @@ class Mercadolibre(BaseProvider):
                     else "No title found"
                 )
 
+                address_element = prop.find(
+                    "span",
+                    {"class": "poly-component__location"},
+                )
+
+                address = (
+                    address_element.get_text().strip()
+                    if address_element
+                    else "Address not found"
+                )
+
                 # Extract price
                 price_element = prop.find("div", class_="poly-component__price")
                 price = (
@@ -56,8 +67,7 @@ class Mercadolibre(BaseProvider):
                     else "No price found"
                 )
 
-                if price is not None:
-                    title = title + " " + price
+                title = f"💰 {price} - 📍 {address} - 🌍 {title}"
 
                 yield {
                     "title": title,
